@@ -1,11 +1,11 @@
-import { PrismaClient } from './../../src/generated/prisma'
+import { PrismaClient } from '@prisma/client'
 
 declare global {
   var prisma: PrismaClient | undefined
 }
 
 export const db =
-  global.prisma ||
+  global.prisma ??
   new PrismaClient({
     log:
       process.env.NODE_ENV === 'development'
@@ -13,6 +13,8 @@ export const db =
         : ['error'],
   })
 
-if (process.env.NODE_ENV !== 'production') global.prisma = db
+if (process.env.NODE_ENV !== 'production') {
+  global.prisma = db
+}
 
 export default db
