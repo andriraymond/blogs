@@ -46,7 +46,7 @@ export default function PhotoCard({ photo, onClick }: PhotoCardProps) {
       </div>
 
       {/* Metadata */}
-      <div className="mt-3">
+      <div className="mt-3 mb-6">
         <p className="text-sm font-medium text-gray-900 line-clamp-2">
           {photo.caption}
         </p>
