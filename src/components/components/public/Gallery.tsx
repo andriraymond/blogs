@@ -88,7 +88,7 @@ export default function Gallery({ photos }: GalleryProps) {
       >
         <Masonry
           breakpointCols={breakpoints}
-          className="masonry-grid"
+          className="masonry-grid flex gap-6"
           columnClassName="masonry-grid-column"
         >
           {photos.map((photo, index) => (
