@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
         where: {
           status: 'published',
           OR: [
-            { caption: { search: q } },
+            { caption: { contains: q, mode: 'insensitive' } },
             { tags: { hasSome: [q] } },
           ],
         },
@@ -44,7 +44,7 @@ export async function GET(req: NextRequest) {
         where: {
           status: 'published',
           OR: [
-            { caption: { search: q } },
+            { caption: { contains: q, mode: 'insensitive' } },
             { tags: { hasSome: [q] } },
           ],
         },
