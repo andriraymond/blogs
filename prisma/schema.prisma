@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Photo {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  imageUrl    String
+  publicId    String   @unique
+  caption     String
+  alt         String
+  momentDate  DateTime
+  uploadDate  DateTime @default(now())
+  tags        String[]
+  status      String   @default("published")
+  comments    Comment[]
+  reactions   Reaction[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([momentDate])
+  @@index([uploadDate])
+  @@map("photos")
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  password  String
+  role      String   @default("editor")
+  name      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Comment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  photoId   String   @db.ObjectId
+  photo     Photo    @relation(fields: [photoId], references: [id], onDelete: Cascade)
+  authorName String
+  text      String
+  email     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([photoId])
+  @@map("comments")
+}
+
+model Reaction {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  photoId   String   @db.ObjectId
+  photo     Photo    @relation(fields: [photoId], references: [id], onDelete: Cascade)
+  type      String   // emoji type: "heart", "wow", "laugh", "cry", "fire"
+  count     Int      @default(1)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([photoId, type])
+  @@index([photoId])
+  @@map("reactions")
+}
